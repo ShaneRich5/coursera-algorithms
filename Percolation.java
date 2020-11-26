@@ -10,7 +10,7 @@ public class Percolation {
     private int rowWidth;
     private int cellCount;
 
-    private int virtualTopNode = 0;
+    private int virtualTopNode;
     private int virtualBottomNode;
 
     private boolean[] openStates;
@@ -48,25 +48,24 @@ public class Percolation {
     public void open(int row, int col) {
         int cellIndex = mapCoordinateToIndex(row, col);
         openStates[cellIndex] = true;
+        
+        openNeighbor(cellIndex, row - 1, col);
+        openNeighbor(cellIndex, row + 1, col);
+        openNeighbor(cellIndex, row, col - 1);
+        openNeighbor(cellIndex, row, col + 1);
+    }
+    
+    private void openNeighbor(int cellIndex, int neighborRow, int neighborCol) {
+        try {
+            int neighborIndex = mapCoordinateToIndex(neighborRow, neighborCol);
 
-        int[][] neighbours = {{ row - 1, col }, { row + 1, col }, { row, col + 1}, { row, col - 1 }};
-
-        for (int i = 0; i < neighbours.length; i++) {
-            int[] neighbourCoordinate = neighbours[i];
-
-            int rowIndex = neighbourCoordinate[0];
-            int colIndex = neighbourCoordinate[1];
-
-            try {
-                int neighbourIndex = mapCoordinateToIndex(rowIndex, colIndex);
-
-                if (openStates[neighbourIndex]) {
-                    fillUnionUF.union(neighbourIndex, cellIndex);
-                    percolateUnionUF.union(neighbourIndex, cellIndex);
-                }
-            } catch (IllegalArgumentException e) { }
+            if (openStates[neighborIndex]) {
+                fillUnionUF.union(neighborIndex, cellIndex);
+                percolateUnionUF.union(neighborIndex, cellIndex);
+            }
+        } catch (IllegalArgumentException e) {
+            // ignore the neighbor index if it is invalid
         }
-
     }
 
     // is the site (row, col) open?
@@ -100,19 +99,15 @@ public class Percolation {
     public boolean percolates() { return percolateUnionUF.connected(virtualTopNode, virtualBottomNode); }
 
     // test client (optional)
-    public static void main(String[] args) {
+    public static void main(String[] args) { }
 
-    }
-
-    /*
-    (0, 0) will map to the  virtual top at index 0
+    /**
+     * Helper method to convert coordinates to 1-based index
+     * (0, 0) maps to 1 to avoid setting it to virtual top node
      */
     private int mapCoordinateToIndex(int row, int col) {
         int rowIndex = row - 1;
         int colIndex = col - 1;
-
-        // System.out.println("row: " + row + " col:  " + col + " rowIndex: " + rowIndex + " colIndex: " + colIndex);
-        System.out.println("row: " + row + " col:  " + col + " rowIndex: " + rowIndex + " colIndex: " + colIndex);
 
         if (rowIndex > rowWidth - 1 || colIndex > rowWidth - 1 || rowIndex < 0 || colIndex < 0) {
             throw new IllegalArgumentException();
