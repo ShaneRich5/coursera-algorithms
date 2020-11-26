@@ -69,12 +69,6 @@ public class PercolationStats {
         double confidenceLo = stats.confidenceLo();
         double confidenceHi = stats.confidenceHi();
 
-        // String output = String.format("mean\t\t= %f\nstddev\t\t= %f\n95%% confidence interval\t= (%f, %f)",
-        //                               mean,
-        //                               stddev,
-        //                               confidenceLo,
-        //                               confidenceHi);
-
         String output = "mean\t\t\t\t\t= " + mean + "\n"
                 + "stddev\t\t\t\t\t= " + stddev + "\n"
                 + "95% confidence interval\t= [" + confidenceLo + ", " + confidenceHi + "]";
