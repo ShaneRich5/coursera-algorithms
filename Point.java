@@ -79,10 +79,10 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        if (y > that.y) return 1;
-        if (y < that.y) return -1;
-        if (x > that.x) return 1;
-        if (x < that.x) return -1;
+        if (y > that.y) return -1;
+        if (y < that.y) return 1;
+        if (x > that.x) return -1;
+        if (x < that.x) return 1;
 
         return 0;
     }
@@ -114,7 +114,7 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        Point origin = new Point(0, 0);
     }
 
     private class PointComparator implements Comparator<Point> {
@@ -123,6 +123,7 @@ public class Point implements Comparable<Point> {
         public PointComparator(Point point) {
             this.point = point;
         }
+
         public int compare(Point point1, Point point2) {
             double slope1 = point.slopeTo(point1);
             double slope2 = point.slopeTo(point2);
